@@ -1,55 +1,78 @@
-Advanced Load Balancer
-A Python implementation comparing three load balancing algorithms, featuring an intelligent Load Aware Balancer that outperforms traditional methods.
-🚀 Algorithms
+Load Balancer Simulator
+A Python-based load balancer simulation that implements and compares three different load balancing algorithms:
 
-Round Robin - Basic cyclic distribution
-Least Connections - Connection-based balancing
-Load Aware ⭐ - Advanced intelligent balancing
+Round Robin: Distributes requests evenly across servers in rotation
+Least Connections: Routes requests to the server with the fewest active connections
+Load Aware: Intelligently distributes based on server capacity and current load
 
-🎯 Load Aware Balancer Features
-Why It's Better
+Features
 
-Smart server selection - Considers both capacity utilization and active requests
-Request queuing - Queues overflow requests instead of dropping them
-Health monitoring - Background health checks with automatic failover
-Real-time adaptation - Dynamic server pool management
-Complete request tracking - Monitors full request lifecycle
+🔄 Multiple Algorithms: Compare performance across different load balancing strategies
+📊 Performance Visualization: Built-in matplotlib charts for performance analysis
+🧵 Thread-Safe: Implements proper threading and locking mechanisms
+🔍 Real-time Monitoring: Track request assignments and server loads
+⚡ Health Checks: Automatic server health monitoring and failover
 
-Key Advantages
+Requirements
+python >= 3.6
+matplotlib
+Installation
 
-Higher success rates through intelligent queuing
-Better resource utilization with capacity-aware assignment
-Fault tolerance via continuous health monitoring
-Scalable performance under varying loads
+Clone this repository:
 
-🚀 Quick Start
+bashgit clone https://github.com/yourusername/load-balancer-simulator.git
+cd load-balancer-simulator
+
+Install dependencies:
+
 bashpip install matplotlib
-python load_balancer.py
-📊 Output
-The system generates performance charts comparing:
+Usage
+Run the simulation:
+bashpython load_balancer.py
+The program will:
 
-Average assignment times
-Success rates
-Real-time processing logs
+Generate random client requests
+Process them through each load balancing algorithm
+Display performance metrics and a comparison chart
 
-🔧 Configuration
+Load Balancing Algorithms
+Round Robin
+Cycles through servers in order, ensuring equal distribution of requests.
+Least Connections
+Routes new requests to the server currently handling the fewest connections.
+Load Aware
+Considers both server capacity and current load, with built-in request queuing and health monitoring.
+Example Output
+Round Robin:
+Request 234 assigned to web-01
+Request 45 assigned to web-02
+...
+
+Least Connections:
+Request 156 assigned to web-03
+✅ Request of size 89 completed on web-01
+...
+
+Load-Aware Balancer:
+Request 267 (req_id 1) assigned to web-02
+Request 134 (req_id 2) queued
+...
+Configuration
+Modify the server configuration in the main section:
 pythonservers = {
-    "web-01": 100,
-    "web-02": 150, 
-    "web-03": 400
+    "web-01": 100,  # capacity
+    "web-02": 150,  # capacity
+    "web-03": 400   # capacity
 }
+Contributing
 
-la_balancer = LoadAwareBalancer(
-    servers,
-    request_timeout=5,
-    health_check_interval=10
-)
-🏆 Results
-Load Aware Balancer consistently achieves:
+Fork the repository
+Create a feature branch (git checkout -b feature/amazing-feature)
+Commit your changes (git commit -m 'Add amazing feature')
+Push to the branch (git push origin feature/amazing-feature)
+Open a Pull Request
 
-Higher success rates (queuing vs dropping)
-Better resource usage (capacity-aware)
-Improved reliability (health monitoring)
-
-
-Efficient load distribution with intelligent server management
+License
+This project is open source and available under the MIT License.
+Author
+Created as a demonstration of load balancing algorithms and distributed system concepts.

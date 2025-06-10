@@ -5,7 +5,7 @@ import queue
 import matplotlib.pyplot as plt
 
 class Client:
-    def _init_(self, num_requests):
+    def __init__(self, num_requests):
         self.requests = []
         for _ in range(num_requests):
             time.sleep(0.3)
@@ -15,7 +15,7 @@ class Client:
         return self.requests
 
 class LoadBalancer:
-    def _init_(self, servers, algorithm):
+    def __init__(self, servers, algorithm):
         self.algorithm = algorithm(servers)
 
     def assign_request(self, request_size):
@@ -29,7 +29,7 @@ class LoadBalancer:
         return server, end_time - start_time
 
 class RoundRobinBalancer:
-    def _init_(self, servers):
+    def __init__(self, servers):
         self.servers = list(servers.keys())
         self.capacities = servers
         self.index = 0
@@ -47,7 +47,7 @@ class RoundRobinBalancer:
             return server
 
 class LeastConnectionsBalancer:
-    def _init_(self, servers):
+    def __init__(self, servers):
         self.servers = {
             server: {
                 "connections": 0,
@@ -96,7 +96,7 @@ class LeastConnectionsBalancer:
         pass
 
 class LoadAwareBalancer:
-    def _init_(self, servers, request_timeout=5, health_check_interval=10):
+    def __init__(self, servers, request_timeout=5, health_check_interval=10):
         self.lock = Lock()
         self.servers = {
             server: {
@@ -184,7 +184,7 @@ class LoadAwareBalancer:
             available_servers = [
                 s for s in self.servers
                 if (self.servers[s]['status'] == 'healthy' and
-                    self.servers[s]['current_load'] + request_size <= self.servers[s]['capacity'])
+                    self.servers[s]['current_load'] + req_size <= self.servers[s]['capacity'])
             ]
 
             if available_servers:
@@ -207,7 +207,7 @@ class LoadAwareBalancer:
                     'queue_position': self.request_queue.qsize()
                 }
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     servers = {
         "web-01": 100,
         "web-02": 150,
