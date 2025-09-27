@@ -140,28 +140,28 @@ class LoadAwareBalancer:
 
         temp_queue = queue.PriorityQueue()
         while not self.request_queue.empty():
-            priority, timestamp, req_id, req_size = self.request_queue.get()
+            priority, timestamp, req_id, request_size = self.request_queue.get()
             if time.time() - timestamp > self.request_timeout:
                 continue
 
             available_servers = [
                 s for s in self.servers
                 if (self.servers[s]['status'] == 'healthy' and
-                    self.servers[s]['current_load'] + req_size <= self.servers[s]['capacity'])
+                    self.servers[s]['current_load'] + request_size <= self.servers[s]['capacity'])
             ]
 
             if available_servers:
                 server_name = min(
                     available_servers,
                     key=lambda s: (
-                        (self.servers[s]['current_load'] + req_size) / self.servers[s]['capacity'],
+                        (self.servers[s]['current_load'] + request_size) / self.servers[s]['capacity'],
                         len(self.servers[s]['active_requests'])
                     )
                 )
-                self._assign_to_server(self.servers[server_name], req_size)
-                print(f"Request {req_size} (req_id {req_id}) assigned to {server_name} from queue")
+                self._assign_to_server(self.servers[server_name], request_size)
+                print(f"Request {request_size} (req_id {req_id}) assigned to {server_name} from queue")
             else:
-                temp_queue.put((priority, timestamp, req_id, req_size))
+                temp_queue.put((priority, timestamp, req_id, request_size))
 
         while not temp_queue.empty():
             self.request_queue.put(temp_queue.get())
@@ -184,7 +184,7 @@ class LoadAwareBalancer:
             available_servers = [
                 s for s in self.servers
                 if (self.servers[s]['status'] == 'healthy' and
-                    self.servers[s]['current_load'] + req_size <= self.servers[s]['capacity'])
+                    self.servers[s]['current_load'] + request_size <= self.servers[s]['capacity'])
             ]
 
             if available_servers:
@@ -206,6 +206,8 @@ class LoadAwareBalancer:
                     'req_id': req_id,
                     'queue_position': self.request_queue.qsize()
                 }
+
+# ================== MAIN ==================
 
 if __name__ == "__main__":
     servers = {
@@ -261,7 +263,7 @@ if __name__ == "__main__":
         total_handled = len(la_balancer.completed_requests)
         for server in la_balancer.servers.values():
             total_handled += len(server['active_requests'])
-        success_counts['Load Aware'] = total_handled+1
+        success_counts['Load Aware'] = total_handled + 1
 
     algorithms = list(assignment_times.keys())
     avg_times = [sum(assignment_times[alg]) / len(assignment_times[alg]) for alg in algorithms]
